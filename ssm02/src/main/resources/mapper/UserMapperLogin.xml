@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gxa.mapper.UserMapperLogin">
+
+    <resultMap id="userResultMap" type="user">
+        <id property="id" column="id"></id>
+        <result property="username" column="username"></result>
+        <result property="password" column="password"></result>
+        <result property="salt" column="salt"></result>
+    </resultMap>
+
+    <select id="queryByUsernameAndPassword" resultMap="userResultMap">
+        SELECT * FROM user WHERE username=#{username} AND password=#{password}
+    </select>
+    <select id="queryByName" resultType="com.gxa.entity.User">
+        SELECT * FROM user WHERE username=#{username}
+    </select>
+    <select id="queryPermsByUsername" resultType="java.lang.String">
+        SELECT m.perm
+        FROM user u,t_role r,t_user_role ur,t_menu m,t_role_menu rm
+        WHERE u.id=ur.user_id AND ur.role_id=r.id AND r.id=rm.role_id AND rm.menu_id=m.id
+          AND u.username=#{username}
+    </select>
+</mapper>

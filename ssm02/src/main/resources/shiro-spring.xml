@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="userRealm" class="com.gxa.realm.UserRealm">
+        <property name="credentialsMatcher">
+            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+                <property name="hashAlgorithmName" value="MD5"></property>
+                <property name="hashIterations" value="1024"></property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="userRealm"></property>
+    </bean>
+    
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"></property>
+         <property name="loginUrl" value="/index.html"></property>
+        <property name="successUrl" value="/main.html"></property>
+
+        <property name="filterChainDefinitions">
+            <value>
+                / = anon
+                /asserts/** =anon
+                /index.html = anon
+                /user/login = anon
+                /upload = anon
+                /uploadfile = anon
+                /studentadd = anon
+                /logout = logout
+                /** = authc
+            </value>
+        </property>
+    </bean>
+
+
+
+</beans>
